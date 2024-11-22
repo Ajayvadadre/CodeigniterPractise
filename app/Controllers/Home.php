@@ -1,8 +1,8 @@
 <?php
 namespace App\Controllers;
 use App\Models\UserModel;
-error_reporting(E_ALL);
-ini_set('display_erros',1);
+// error_reporting(E_ALL);
+// ini_set('display_erros',1);
 
 
 class Home extends BaseController
@@ -47,7 +47,7 @@ class Home extends BaseController
       curl_close($ch);
 
       session()->setFlashData("sucess","Data added Sucessfully");
-       return redirect()->to(base_url());
+      return redirect()->to(base_url("/"));
     }
 
     public function getSingleUser($id){
