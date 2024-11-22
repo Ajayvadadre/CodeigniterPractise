@@ -5,14 +5,27 @@
 CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
 More information can be found at the [official site](https://codeigniter.com).
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+This repositary is made for CRUD application that is made using PHP Codeigniter and MYsql
+after cloning the repo in local there are some things to check or consider before starting the project;
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Things to be installed first :
+- Composer (package manager like npm but for php).
+- Php (check the version before installing as it may create prblm after installing)
+- xampp (server to run php as its a server side rendering language)
+
+## After installing the above:
+- create a new project inside the htdocs folder of xampp (xampp/htdocs)
+- remove the ";" from php.ini file before intl extension.
 
 You can read the [user guide](https://codeigniter.com/user_guide/)
 corresponding to the latest version of the framework.
+
+Additionally, make sure that the following extensions are enabled in your PHP:
+
+- json (enabled by default - don't turn it off)
+- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
+- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
 
 ## Installation & updates
 
@@ -60,9 +73,3 @@ PHP version 8.1 or higher is required, with the following extensions installed:
 > - The end of life date for PHP 8.0 was November 26, 2023.
 > - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
 > - The end of life date for PHP 8.1 will be December 31, 2025.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
