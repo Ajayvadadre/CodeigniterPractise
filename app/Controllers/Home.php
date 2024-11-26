@@ -7,13 +7,19 @@ use App\Models\UserModel;
 
 class Home extends BaseController
 {   
-    
+    public $user;
+
     public function __construct(){
         helper(['url']);
         $this->user = new UserModel();
+
+        if(!session()->get('username')){
+            return redirect()->to('login');
+        }
     }
     public function index()
     {
+        // echo view('inc/register');
         echo view('inc/header');
         $data['users'] = $this->user->orderby('id',"DESC")->paginate(10,'group1');
         $data['pager'] = $this->user->pager; 
@@ -24,8 +30,6 @@ class Home extends BaseController
     public function saveUser(){
        $username = $this->request->getVar('name');
        $email = $this->request->getVar('email');
-      
-
        $this->user->save(["name" => $username,"email"=>$email]);
        $mongoId = $this->user->insertID();
 
@@ -47,7 +51,7 @@ class Home extends BaseController
       curl_close($ch);
 
       session()->setFlashData("sucess","Data added Sucessfully");
-      return redirect()->to(base_url("/"));
+      return redirect()->to(base_url("/dashboard"));
     }
 
     public function getSingleUser($id){
@@ -63,9 +67,6 @@ class Home extends BaseController
         $data['email'] = $email;     
         $this->user->update($id,$data);
        
-       
-      
-    
         //Curl update user
         $ch = curl_init();
         $url = "http://localhost:5000/users/update/".$id;
