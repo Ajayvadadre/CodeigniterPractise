@@ -17,3 +17,4 @@ $routes->post('/updateUser', 'Home::updateUser');
 $routes->post('/deleteUser', 'Home::deleteUser');
 $routes->post('/deleteAllUser', 'Home::deleteAllUser');
 $routes->post('/create', 'Home::deleteAllUser');
+$routes->post('/filter', 'Home::index');

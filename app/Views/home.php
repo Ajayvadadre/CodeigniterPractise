@@ -68,15 +68,19 @@
 				}
 			}
 		})
+		// In your Javascript (external .js resource or <script> tag)
+		$(document).ready(function() {
+			$('.js-example-basic-single').select2();
+		});
 	</script>
 
 	<style>
 		.logout {
-			width: 150px;
+			/* width: 150px;
 			z-index: 10;
-			text-align: end;
+			text-align: end; */
 			font-size: 25px;
-			margin-left: 10px;
+			/* margin-left: 5rem; */
 			/* margin-top: 5px; */
 
 		}
@@ -101,6 +105,21 @@
 		.search form input {
 			width: 200px;
 		}
+
+
+		.logo a {
+			text-decoration: none;
+			color: white;
+		}
+
+		html {
+			background-color: lightgray;
+		}
+
+		.table-responsive {
+			background-color: lightgray;
+
+		}
 	</style>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
@@ -119,56 +138,110 @@
 			<?php
 			}
 			?>
-			<div class=" ">
+			<div class=" container">
 				<div class="bg-dark px-3 py-2">
-					<div class="row px-12 d-flex mt-1 justify-content-between">
-						<div class="col-sm-2 text-light">
-							<h2 style="font-family:Arial, Helvetica, sans-serif;"><b>CRUD</b></h2>
+					<div class="row px-12 d-flex mt-1 justify-content-between ">
+						<div class="col-sm-3 text-light logo">
+							<a href="/dashboard">
+								<h2 style="font-family:Arial, Helvetica, sans-serif; cursor:pointer;"><b>CRUD</b></h2>
+							</a>
 						</div>
-						<div class="right col-sm-2  d-flex ">
-							<!-- <div class="search">
-								<form class="d-flex" method="post">
-									<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+						<div class="right col-sm-4  d-flex  ">
+							<div class="search">
+								<form class="d-flex" method="get">
+									<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
 									<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 								</form>
-							</div> -->
-
-							<!-- <div class="search d-flex">
-								<input type="text" placeholder="Search">
-								<button type="submit">Search</button>
 							</div>
-							 -->
-							<div class="col-sm-2 mainButtons d-flex">
+
+							<div class=" mainButtons ml-lg-5 d-flex">
 								<a href="#addEmployeeModal" class="btn btn-success pt-1 py-0" data-toggle="modal"><i class="material-icons">&#xE147;</i></a>
 								<a href="#deleteEmployeeModal" class="delete_all_data btn pt-1 btn-danger py-0" data-toggle="modal"> <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 							</div>
+							<div class="filter ml-2 ">
+								<form action="">
+									<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat">Filter</button>
+								</form>
 
-							<div class="logout">
-								<a href="/"><i class="fa fa-sign-out fa-lg	" aria-hidden="true"></i></a>
+								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form action="/filter" method="post" name="filter">
+													<div class="mb-3 text-sm-left">
+														<label for="idFilter" class="col-form-label">Id:</label>
+														<select name="idFilter" id="" class="col-form-label">
+															<?php if ($users) {
+																foreach ($users as $user) { ?>
+																	<option value="<?php echo $user['id']; ?>"><?php echo $user['id']; ?></option>
+															<?php }
+															} ?>
+														</select>
+
+													</div>
+													<div class="mb-3 text-sm-left">
+														<label for="nameFilter" class="col-form-label">Name:</label>
+														<select name="nameFilter" id="" class="col-form-label  js-example-basic-single">
+															<?php if ($users) {
+																foreach ($users as $user) { ?>
+																	<option value="<?php echo $user['name'] ?>"><?php echo $user['name'] ?></option>
+															<?php }
+															} ?>
+
+														</select>
+													</div>
+													<div class="mb-3 text-sm-left">
+														<label for="emailFilter" class="col-form-label">Email:</label>
+														<select name="emailFilter" id="" class="col-form-label">
+															<?php if ($users) {
+																foreach ($users as $user) { ?>
+																	<option value="<?php echo $user["email"] ?>"><?php echo $user["email"]; ?></option>
+															<?php }
+															} ?>
+
+														</select>
+													</div>
+
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-primary">Filter</button>
+											</div>
+											</form>
+										</div>
+									</div>
+								</div>
 							</div>
+						</div>
+
+						<div class="logout col-sm-2 a justify-content-end d-flex col-4" style="cursor:pointer;">
+							<a><i class="fa fa-sign-out fa-lg	" aria-hidden="true"></i></a>
 						</div>
 					</div>
 				</div>
 				<table class="table table1 table-striped table-hover ">
-					<thead>
-						<tr>
-							<th>
+					<thead class="thead bg-danger">
+						<tr class="mainHead bg-danger">
+							<th class="bg-secondary text-light bg-gradient">
 								<span class="custom-checkbox">
 									<input type="checkbox" id="selectAll">
 									<label for="selectAll"></label>
 								</span>
 							</th>
-							<th>Name</th>
-							<th>Email</th>
-							<th>Actions</th>
+							<th class="bg-secondary text-light bg-gradient">Id</th>
+							<th class="bg-secondary text-light bg-gradient">Name</th>
+							<th class="bg-secondary text-light bg-gradient">Email</th>
+							<th class="bg-secondary text-light bg-gradient">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
 						if ($users) {
 							foreach ($users as $user) {
-
-
 						?>
 								<tr>
 									<input type="hidden" id="userId" name="id" value="<?php echo $user['id']; ?>">
@@ -178,17 +251,21 @@
 											<label for="data_checkbox"></label>
 										</span>
 									</td>
-									<td><?php echo $user['name']; ?></td>
+									<td><?php echo $user['id'];  ?></td>
+									<td><?php echo $user['name'];  ?></td>
 									<td><?php echo $user['email']; ?></td>
 									<td>
 										<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 										<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 									</td>
 								</tr>
-						<?php
+							<?php
 							}
-						}
-						?>
+						} else { ?>
+							<tr>
+								<td class="text-danger " colspan="5" style="text-align: center; font-size:25px;">No user found</td>
+							</tr>
+						<?php } ?>
 					</tbody>
 				</table>
 				<div class="d-flex justify-content-center align-items-center">
