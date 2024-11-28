@@ -74,55 +74,10 @@
 		});
 	</script>
 
-	<style>
-		.logout {
-			/* width: 150px;
-			z-index: 10;
-			text-align: end; */
-			font-size: 25px;
-			/* margin-left: 5rem; */
-			/* margin-top: 5px; */
 
-		}
-
-		.logout i {
-			color: white;
-			/* border: 1px solid white; */
-			border-radius: 10px;
-			padding: 5px;
-		}
-
-		.right {
-			height: 10%;
-			text-align: center;
-			justify-content: center;
-		}
-
-		.mainButtons {
-			gap: 10px;
-		}
-
-		.search form input {
-			width: 200px;
-		}
-
-
-		.logo a {
-			text-decoration: none;
-			color: white;
-		}
-
-		html {
-			background-color: lightgray;
-		}
-
-		.table-responsive {
-			background-color: lightgray;
-
-		}
-	</style>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
+	<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	</head>
 
 	<div class="container-l   ">
 		<div class="table-responsive d-flex flex-column ">
@@ -138,7 +93,25 @@
 			<?php
 			}
 			?>
-			<div class=" container">
+
+			<div class=" main-container ">
+				<?php if (session()->getFlashdata('error')): ?>
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						<?= session()->getFlashdata('error') ?>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				<?php endif; ?>
+
+				<?php if (session()->getFlashdata('success')): ?>
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<?= session()->getFlashdata('success') ?>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+				<?php endif; ?>
 				<div class="bg-dark px-3 py-2">
 					<div class="row px-12 d-flex mt-1 justify-content-between ">
 						<div class="col-sm-3 text-light logo">
@@ -170,35 +143,38 @@
 												<h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
 												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
-											<div class="modal-body">
+											<div class="modal-body filter">
 												<form action="/filter" method="post" name="filter">
-													<div class="mb-3 text-sm-left">
+													<div class="mb-3 text-sm-left filterSelect">
 														<label for="idFilter" class="col-form-label">Id:</label>
-														<select name="idFilter" id="" class="col-form-label">
-															<?php if ($users) {
-																foreach ($users as $user) { ?>
+														<select name="idFilter" id="" class="col-form-label form-select">
+															<option value="Select">Select</option>
+															<?php if ($all_users) {
+																foreach ($all_users  as $user) { ?>
 																	<option value="<?php echo $user['id']; ?>"><?php echo $user['id']; ?></option>
 															<?php }
 															} ?>
 														</select>
 
 													</div>
-													<div class="mb-3 text-sm-left">
+													<div class="mb-3 text-sm-left filterSelect">
 														<label for="nameFilter" class="col-form-label">Name:</label>
-														<select name="nameFilter" id="" class="col-form-label  js-example-basic-single">
-															<?php if ($users) {
-																foreach ($users as $user) { ?>
+														<select name="nameFilter" id="" class="col-form-label  form-select">
+															<option value="Select">Select</option>
+															<?php if ($all_users) {
+																foreach ($all_users as $user) { ?>
 																	<option value="<?php echo $user['name'] ?>"><?php echo $user['name'] ?></option>
 															<?php }
 															} ?>
 
 														</select>
 													</div>
-													<div class="mb-3 text-sm-left">
-														<label for="emailFilter" class="col-form-label">Email:</label>
-														<select name="emailFilter" id="" class="col-form-label">
-															<?php if ($users) {
-																foreach ($users as $user) { ?>
+													<div class="mb-3 text-sm-left filterSelect  ">
+														<label for="emailFilter" class="col-form-label font-family">Email:</label>
+														<select name="emailFilter" id="" class="col-form-label form-select">
+															<option value="Select">Select</option>
+															<?php if ($all_users) {
+																foreach ($all_users as $user) { ?>
 																	<option value="<?php echo $user["email"] ?>"><?php echo $user["email"]; ?></option>
 															<?php }
 															} ?>
@@ -225,17 +201,18 @@
 				</div>
 				<table class="table table1 table-striped table-hover ">
 					<thead class="thead bg-danger">
-						<tr class="mainHead bg-danger">
+						<tr class="mainHead bg-danger ">
 							<th class="bg-secondary text-light bg-gradient">
-								<span class="custom-checkbox">
+								<span class="custom-checkbox ">
 									<input type="checkbox" id="selectAll">
 									<label for="selectAll"></label>
 								</span>
 							</th>
-							<th class="bg-secondary text-light bg-gradient">Id</th>
-							<th class="bg-secondary text-light bg-gradient">Name</th>
-							<th class="bg-secondary text-light bg-gradient">Email</th>
-							<th class="bg-secondary text-light bg-gradient">Actions</th>
+							<th class="bg-secondary text-light bg-gradient fs-5  border-left">ID</th>
+							<th class="bg-secondary text-light bg-gradient fs-5 border-left">Name</th>
+							<th class="bg-secondary text-light bg-gradient fs-5 border-left">Age</th>
+							<th class="bg-secondary text-light bg-gradient fs-5 border-left">Email</th>
+							<th class="bg-secondary text-light bg-gradient fs-5 border-left ">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -251,11 +228,12 @@
 											<label for="data_checkbox"></label>
 										</span>
 									</td>
-									<td><?php echo $user['id'];  ?></td>
-									<td><?php echo $user['name'];  ?></td>
-									<td><?php echo $user['email']; ?></td>
-									<td>
-										<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+									<td class=" border-left"><?php echo $user['id'];  ?></td>
+									<td class=" border-left"><?php echo $user['name'];  ?></td>
+									<td class=" border-left"><?php echo $user['name'];  ?></td>
+									<td class=" border-left"><?php echo $user['email']; ?></td>
+									<td class=" border-left">
+										<a href="#editEmployeeModal" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 										<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 									</td>
 								</tr>
@@ -268,11 +246,63 @@
 						<?php } ?>
 					</tbody>
 				</table>
-				<div class="d-flex justify-content-center align-items-center">
-					<ul class="pagination">
-						<?= $pager->links('group1', 'bs_pagination'); ?>
-					</ul>
+				<div class="footer d-flex justify-content-end ">
+					<div class=" d-inline mr-xl-5 pagination justify-content-center align-items-center">
+						<ul class="pagination">
+							<?= $pager->links('group1', 'bs_pagination'); ?>
+						</ul>
+					</div>
+					<div class="div d-flex gap-1 ">
+						<div class="downloadData">
+							<form action="/UploadData">
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+									Upload
+								</button>
+							</form>
+						</div>
+						<div class="downloadData">
+							<form action="/ExportData" method="get">
+								<button type="submit" class="btn btn-success">Download</button>
+							</form>
+
+							<P><?php echo session()->getFlashData("message") ?></P>
+
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered" role="document">
+							<div class="modal-content">
+								<form action="<?= base_url('UploadData') ?>" method="post" enctype="multipart/form-data">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalCenterTitle">Upload your file</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<div class="input-group mb-3">
+											<div class="input-group-prepend">
+												<span class="input-group-text">Upload</span>
+											</div>
+											<div class="custom-file">
+												<input type="file" name="uploadFile" class="custom-file-input" style="cursor: pointer;" id="inputGroupFile01" accept=".csv,.xls,.xlsx">
+												<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Upload</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
 				</div>
+
 			</div>
 		</div>
 	</div>

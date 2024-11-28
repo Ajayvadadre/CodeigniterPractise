@@ -1,6 +1,5 @@
-
 <?php if (isset($error)) : ?>
-  <p><?= $error ?></p>
+    <p><?= $error ?></p>
 <?php endif; ?>
 
 <!--  -->
@@ -41,7 +40,8 @@
         .button button {
             width: 100%;
         }
-        .wrong-password{
+
+        .wrong-password {
             color: red;
         }
     </style>
@@ -57,7 +57,7 @@
                     <label class="form-label" for="form2Example1"> Username</label>
                     <input type="text" id="form2Example1" class="form-control" name="username" />
                     <div class="wrong-password">
-                        <P><?php echo session()->getFlashData("usernameError")?></P>
+                        <P><?php echo session()->getFlashData("usernameError") ?></P>
                     </div>
                 </div>
 
@@ -65,21 +65,18 @@
                     <label class="form-label" for="form2Example2">Password</label>
                     <input type="password" id="form2Example2" class="form-control" name="password" />
                     <div class="wrong-password">
-                        <P><?php echo session()->getFlashData("passwordError")?></P>
+                        <P><?php echo session()->getFlashData("passwordError") ?></P>
                     </div>
                 </div>
-
-
-
                 <div class="button">
-                    <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4" >Sign in </button>
-                </div>  
+                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Sign in </button>
+                </div>
                 <div class="text-center">
-        <p>Not a member? <a href="/register">register</a></p>
-      </div>
+                    <p>Not a member? <a href="/register">register</a></p>
+                </div>
             </form>
         </div>
-    </div>  
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

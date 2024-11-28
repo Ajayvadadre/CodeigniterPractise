@@ -12,6 +12,7 @@ class LoginController extends Controller
   {
     helper(['url']);
     $this->userModel = new UserCredsModel();
+
   }
 
   public function index()
@@ -25,7 +26,6 @@ class LoginController extends Controller
       $password = $this->request->getVar('password');
       $userModel = new UserCredsModel();
       $user = $userModel->where('username', $username)->first();
-  
       if ($user) {
          $enc_password  = $user['password'];
          $dec_password  = password_verify($password, $enc_password);
