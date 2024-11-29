@@ -79,8 +79,8 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	</head>
 
-	<div class="container-l   ">
-		<div class="table-responsive d-flex flex-column ">
+	<div class="container-l  ">
+		<div class="table-responsive d-flex  flex-column ">
 			<?php
 			if (session()->getFlashData("sucess")) {
 			?>
@@ -94,7 +94,7 @@
 			}
 			?>
 
-			<div class=" main-container ">
+			<div class=" main-container">
 				<?php if (session()->getFlashdata('error')): ?>
 					<div class="alert alert-danger alert-dismissible fade show" role="alert">
 						<?= session()->getFlashdata('error') ?>
@@ -112,107 +112,149 @@
 						</button>
 					</div>
 				<?php endif; ?>
-				<div class="bg-dark px-3 py-2">
-					<div class="row px-12 d-flex mt-1 justify-content-between ">
-						<div class="col-sm-3 text-light logo">
-							<a href="/dashboard">
-								<h2 style="font-family:Arial, Helvetica, sans-serif; cursor:pointer;"><b>CRUD</b></h2>
-							</a>
+
+				<!-- Navbar  -->
+				<div class="main-head px-4 py-2  pt-4">
+					<div class="row px-12">
+						<div class=" text-light logo">
+							<div class="toppest-div d-flex justify-content-between">
+								<a href="/dashboard">
+									<h5 style="font-family:Arial, Helvetica, sans-serif; cursor:pointer; margin-bottom:20px">Client data</h5>
+								</a>
+								
+							</div>
 						</div>
-						<div class="right col-sm-4  d-flex  ">
+						<div class="right">
 							<div class="search">
 								<form class="d-flex" method="get">
 									<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-									<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+									<button class="btn btn-primary my-2 my-sm-0" type="submit"><i class="fas fa-search"></i>
+									</button>
 								</form>
 							</div>
 
-							<div class=" mainButtons ml-lg-5 d-flex">
-								<a href="#addEmployeeModal" class="btn btn-success pt-1 py-0" data-toggle="modal"><i class="material-icons">&#xE147;</i></a>
-								<a href="#deleteEmployeeModal" class="delete_all_data btn pt-1 btn-danger py-0" data-toggle="modal"> <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							</div>
-							<div class="filter ml-2 ">
-								<form action="">
-									<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat">Filter</button>
-								</form>
 
-								<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
-												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							<div class="secondDiv">
+								<div class="filter d-flex mt-2">
+									<form action="">
+										<button type="button" class="dropdown-toggle " style="  text-transform: capitalize; color:dodgerblue; border:1px solid lightgrey; padding:5px 20px; background-color:white; border-radius:5px; padding: 4px 25px" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat"><span  class="caret"></span> Filter</button>
+									</form>
+									
+
+									<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+
+												<div class="modal-header">
+													<h1 class="modal-title fs-5" id="exampleModalLabel">Filter</h1>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body filter">
+													<form action="/filter" method="post" name="filter">
+														<div class="mb-3 text-sm-left filterSelect">
+															<label for="idFilter" class="col-form-label">Id:</label>
+															<select name="idFilter" id="" class="col-form-label form-select">
+																<option value="Select">Select</option>
+																<?php if ($all_users) {
+																	foreach ($all_users  as $user) { ?>
+																		<option value="<?php echo $user['id']; ?>"><?php echo $user['id']; ?></option>
+																<?php }
+																} ?>
+															</select>
+
+														</div>
+														<div class="mb-3 text-sm-left filterSelect">
+															<label for="nameFilter" class="col-form-label">Name:</label>
+															<select name="nameFilter" id="" class="col-form-label  form-select">
+																<option value="Select">Select</option>
+																<?php if ($all_users) {
+																	foreach ($all_users as $user) { ?>
+																		<option value="<?php echo $user['name'] ?>"><?php echo $user['name'] ?></option>
+																<?php }
+																} ?>
+
+															</select>
+														</div>
+														<div class="mb-3 text-sm-left filterSelect  ">
+															<label for="emailFilter" class="col-form-label font-family">Email:</label>
+															<select name="emailFilter" id="" class="col-form-label form-select">
+																<option value="Select">Select</option>
+																<?php if ($all_users) {
+																	foreach ($all_users as $user) { ?>
+																		<option value="<?php echo $user["email"] ?>"><?php echo $user["email"]; ?></option>
+																<?php }
+																} ?>
+
+															</select>
+														</div>
+
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-primary">Filter</button>
+												</div>
+												</form>
+
 											</div>
-											<div class="modal-body filter">
-												<form action="/filter" method="post" name="filter">
-													<div class="mb-3 text-sm-left filterSelect">
-														<label for="idFilter" class="col-form-label">Id:</label>
-														<select name="idFilter" id="" class="col-form-label form-select">
-															<option value="Select">Select</option>
-															<?php if ($all_users) {
-																foreach ($all_users  as $user) { ?>
-																	<option value="<?php echo $user['id']; ?>"><?php echo $user['id']; ?></option>
-															<?php }
-															} ?>
-														</select>
+										</div>
 
-													</div>
-													<div class="mb-3 text-sm-left filterSelect">
-														<label for="nameFilter" class="col-form-label">Name:</label>
-														<select name="nameFilter" id="" class="col-form-label  form-select">
-															<option value="Select">Select</option>
-															<?php if ($all_users) {
-																foreach ($all_users as $user) { ?>
-																	<option value="<?php echo $user['name'] ?>"><?php echo $user['name'] ?></option>
-															<?php }
-															} ?>
-
-														</select>
-													</div>
-													<div class="mb-3 text-sm-left filterSelect  ">
-														<label for="emailFilter" class="col-form-label font-family">Email:</label>
-														<select name="emailFilter" id="" class="col-form-label form-select">
-															<option value="Select">Select</option>
-															<?php if ($all_users) {
-																foreach ($all_users as $user) { ?>
-																	<option value="<?php echo $user["email"] ?>"><?php echo $user["email"]; ?></option>
-															<?php }
-															} ?>
-
-														</select>
-													</div>
-
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-												<button type="submit" class="btn btn-primary">Filter</button>
-											</div>
+									</div>
+									<div class=" mainButtons  d-flex ml-4">
+										<a href="#addEmployeeModal" style="padding:4px 25px" class="btn btn-outline-secondary BTN  text-capitalize  " data-toggle="modal">Add </a>
+										<a href="#deleteEmployeeModal" style="padding:4px 25px" class="delete_all_data text-capitalize btn BTN btn-danger" data-toggle="modal"> Delete</a>
+									</div>
+								</div>
+								<div class="div d-flex data-btns justify-content-end">
+									<div class="dataButtons">
+										<div class="uploadData">
+											<form action="/UploadData">
+												<button type="button" class="btn btn-primary" style="text-transform: capitalize; width:max-content;" data-toggle="modal" data-target="#exampleModalCenter">
+													+ Upload
+												</button>
 											</form>
 										</div>
+										<div class="downloadData">
+											<form action="/ExportData" method="get">
+												<button type="submit" style="text-transform: capitalize; color:dodgerblue; border:1px solid lightgrey" class="btn ">Export</button>
+											</form>
+
+											<P><?php echo session()->getFlashData("message") ?></P>
+
+										</div>
 									</div>
+									<div class="dropdown logout  justify-content-end d-flex ml-3  ">
+									<button class=" border-0 bg-light text-dark " style="height: 0;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+										&vellip;
+									</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="/">Logout</a></li>
+									</ul>
+								</div>
 								</div>
 							</div>
 						</div>
 
-						<div class="logout col-sm-2 a justify-content-end d-flex col-4" style="cursor:pointer;">
+
+						<!-- <div class="logout col-sm-12 justify-content-end d-flex col-4" style="cursor:pointer;">
 							<a><i class="fa fa-sign-out fa-lg	" aria-hidden="true"></i></a>
-						</div>
+						</div> -->
+
+
 					</div>
 				</div>
-				<table class="table table1 table-striped table-hover ">
+				<table class="table table1  table-hover ">
 					<thead class="thead bg-danger">
 						<tr class="mainHead bg-danger ">
-							<th class="bg-secondary text-light bg-gradient">
+							<th class="">
 								<span class="custom-checkbox ">
 									<input type="checkbox" id="selectAll">
 									<label for="selectAll"></label>
 								</span>
 							</th>
-							<th class="bg-secondary text-light bg-gradient fs-5  border-left">ID</th>
-							<th class="bg-secondary text-light bg-gradient fs-5 border-left">Name</th>
-							<th class="bg-secondary text-light bg-gradient fs-5 border-left">Age</th>
-							<th class="bg-secondary text-light bg-gradient fs-5 border-left">Email</th>
-							<th class="bg-secondary text-light bg-gradient fs-5 border-left ">Actions</th>
+							<th class=" fs-5  border-left">ID</th>
+							<th class=" fs-5 border-left">Name</th>
+							<th class=" fs-5 border-left">Email</th>
+							<th class=" fs-5 border-left ">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -220,7 +262,7 @@
 						if ($users) {
 							foreach ($users as $user) {
 						?>
-								<tr>
+								<tr class="tr">
 									<input type="hidden" id="userId" name="id" value="<?php echo $user['id']; ?>">
 									<td>
 										<span class="custom-checkbox">
@@ -229,7 +271,6 @@
 										</span>
 									</td>
 									<td class=" border-left"><?php echo $user['id'];  ?></td>
-									<td class=" border-left"><?php echo $user['name'];  ?></td>
 									<td class=" border-left"><?php echo $user['name'];  ?></td>
 									<td class=" border-left"><?php echo $user['email']; ?></td>
 									<td class=" border-left">
@@ -246,29 +287,13 @@
 						<?php } ?>
 					</tbody>
 				</table>
-				<div class="footer d-flex justify-content-end ">
-					<div class=" d-inline mr-xl-5 pagination justify-content-center align-items-center">
+				<div class="footer d-flex justify-content-center ">
+					<div class=" d-inline  pagination justify-content-center align-items-center">
 						<ul class="pagination">
 							<?= $pager->links('group1', 'bs_pagination'); ?>
 						</ul>
 					</div>
-					<div class="div d-flex gap-1 ">
-						<div class="downloadData">
-							<form action="/UploadData">
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-									Upload
-								</button>
-							</form>
-						</div>
-						<div class="downloadData">
-							<form action="/ExportData" method="get">
-								<button type="submit" class="btn btn-success">Download</button>
-							</form>
 
-							<P><?php echo session()->getFlashData("message") ?></P>
-
-						</div>
-					</div>
 
 					<!-- Modal -->
 					<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

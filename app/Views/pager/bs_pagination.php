@@ -38,7 +38,7 @@ $pager->setSurroundCount(2);
 				</a>
 			</li>
 			<li>
-				<a href="<?= $pager->getLast() ?>" aria-label="<?= lang('Pager.last') ?>">
+			<a href="<?= site_url($pager->getLast()) ?>" aria-label="<?= lang('Pager.last') ?>">
 					<span aria-hidden="true"><?= lang('Pager.last') ?></span>
 				</a>
 			</li>

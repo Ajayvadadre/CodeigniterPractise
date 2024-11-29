@@ -228,28 +228,29 @@ table.table .avatar {
 }
 
 html {
-  background-color: rgb(238, 237, 237);
+  background-color: #ebebf0;
 }
-
+.tr td {
+  background-color: white;
+}
+.main-container {
+  padding: 0px 50px;
+  background-color: #ebebf0;
+  /* border: 2px solid red; */
+  border-radius: 10px;
+}
 .table-responsive {
-  background-color: rgb(238, 237, 237);
+  background-color: #ebebf0;
 }
 .logo a {
   text-decoration: none;
-  color: white;
+  color: rgb(29, 29, 29);
 }
-
 .logout {
-  /* width: 150px;
-    z-index: 10;
-    text-align: end; */
   font-size: 25px;
-  /* margin-left: 5rem; */
-  /* margin-top: 5px; */
 }
-
 .logout i {
-  color: white;
+  color: #494848;
   /* border: 1px solid white; */
   border-radius: 10px;
   padding: 5px;
@@ -262,24 +263,52 @@ html {
 }
 
 .mainButtons {
-  gap: 10px;
+  gap: 7px;
+  padding: 0px;
 }
+.mainButtons a {
+  padding: 5px 15px;
 
+  height: max-content;
+}
 .search form input {
   width: 200px;
 }
 
 .mainHead {
-  border-top: 2px solid black;
+  background-color: #f8f9fb;
 }
 
-.pagination {
+/* .pagination {
   margin-right: 11.5rem;
-}
+} */
 
-.main-container {
-  padding: 0px 50px;
-  background-color: rgb(235, 232, 232);
-  /* border: 2px solid red; */
-  border-radius: 10px;
+.main-head {
+  background-color: #f8f9fb;
+}
+.data-btns {
+  justify-content: end;
+  display: inline-block;
+  /* width: fit-content; */
+  /* display: flex; */
+}
+.dataButtons {
+  display: flex;
+  gap: 7px;
+}
+.dataButtons .downloadData button{
+  padding: 4px 30px;
+}
+.dataButtons .uploadData button{
+  padding: 4px 25px;
+
+}
+.secondDiv {
+  display: flex;
+  justify-content: space-between;
+}
+.BTN{
+  padding: 4px 25px;
+  border: 2px solid red;
+ 
 }

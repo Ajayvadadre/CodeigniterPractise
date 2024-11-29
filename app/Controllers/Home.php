@@ -252,13 +252,13 @@ class Home extends BaseController
     // }
 
     public function uploadData()
-    {       
+    {
         try {
             $file = $this->request->getFile('uploadFile');
 
             // Check if file was uploaded
             if (!$file || !$file->isValid()) {
-                return redirect()->to('/dashboard')
+                return redirect()->to(base_url("/dashboard"))
                     ->with('error', 'No file uploaded or invalid file.');
             }
 
@@ -267,7 +267,7 @@ class Home extends BaseController
             $allowed_ext = ['xls', 'csv', 'xlsx'];
 
             if (!in_array($ext, $allowed_ext)) {
-                return redirect()->to('/dashboard')
+                return redirect()->to(base_url("/dashboard"))
                     ->with('error', 'Invalid file type. Please upload XLS, XLSX, or CSV file.');
             }
 
@@ -291,6 +291,7 @@ class Home extends BaseController
                 // Skip header row and process data
                 for ($i = 1; $i < count($data); $i++) {
                     $row = $data[$i];
+                    $mongoId = $this->user->insertID();
 
                     // Validate row data
                     if (!empty($row[0]) && !empty($row[1])) {
@@ -298,22 +299,41 @@ class Home extends BaseController
                             'name' => $row[0],
                             'email' => $row[1]
                         ];
-
+                        $mongoData =[
+                            '_id'=>$mongoId,
+                            'name' => $row[0],
+                            'email' => $row[1]
+                        ];
                         // Check for existing user
                         $existingUser = $db->table('users')
                             ->where('email', $userData['email'])
                             ->get()
                             ->getRow();
 
-                        if ($existingUser) {
-                            // Update existing user
-                            $db->table('users')
-                                ->where('id', $existingUser->id)
-                                ->update($userData);
-                        } else {
+                        // if ($existingUser) {
+                        //     // Update existing user
+                        //     var_dump("existing".$userData);
+
+                        //     $db->table('users')
+                        //         ->where('id', $existingUser->id)
+                        //         ->update($userData);
+                        // } else {
                             // Insert new user
+                            // var_dump("insert".$userData);
+                            ini_set('max_execution_time', 300); // 5 minutes
                             $db->table('users')->insert($userData);
-                        }
+                            $ch = curl_init();
+                            $id = $this->request->getVar('updateId');
+                            $url = "http://localhost:5000/users/create";
+                            curl_setopt($ch, CURLOPT_URL, $url);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_POST, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($mongoData));
+
+                            $response = curl_exec($ch);
+                            curl_close($ch);
+                        // }
 
                         $successCount++;
                     }
@@ -327,20 +347,20 @@ class Home extends BaseController
                 }
 
                 if ($db->transStatus() === FALSE) {
-                    return redirect()->to('/dashboard')
+                    return redirect()->to(base_url("/dashboard"))
                         ->with('error', 'Failed to import data. Please try again.');
                 }
 
-                return redirect()->to('/dashboard')
+                return redirect()->to(base_url("/dashboard"))
                     ->with('success', "Successfully imported $successCount records.");
             } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
                 log_message('error', 'Error loading file: ' . $e->getMessage());
-                return redirect()->to('/dashboard')
+                return redirect()->to(base_url("/dashboard"))
                     ->with('error', 'Error reading file: ' . $e->getMessage());
             }
         } catch (\Exception $e) {
             log_message('error', 'Upload error: ' . $e->getMessage());
-            return redirect()->to('/dashboard')
+            return redirect()->to(base_url("/dashboard"))
                 ->with('error', 'An error occurred during upload.');
         }
     }
