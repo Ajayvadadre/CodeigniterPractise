@@ -9,7 +9,7 @@ $pager->setSurroundCount(2);
 ?>
 
 <nav aria-label="<?= lang('Pager.pageNavigation') ?>">
-	<ul class="pagination">
+	<ul class="pagination d-flex gap-1">
 		<?php if ($pager->hasPrevious()) : ?>
 			<li>
 				<a href="<?= $pager->getFirst() ?>" aria-label="<?= lang('Pager.first') ?>">

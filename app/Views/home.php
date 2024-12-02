@@ -114,12 +114,12 @@
 				<?php endif; ?>
 
 				<!-- Navbar  -->
-				<div class="main-head px-4 py-2  pt-4">
+				<div class="main-head px-4 py-4  pt-4">
 					<div class="row px-12">
-						<div class=" text-light logo">
+						<div class="text-light logo">
 							<div class="toppest-div d-flex justify-content-between">
 								<a href="/dashboard">
-									<h5 style="font-family:Arial, Helvetica, sans-serif; cursor:pointer; margin-bottom:20px">Client data</h5>
+									<h4 style="font-size: 25px;font-family:Arial, Helvetica, sans-serif; cursor:pointer; margin-bottom:20px">Client data</h4>
 								</a>
 								
 							</div>
@@ -135,7 +135,7 @@
 
 
 							<div class="secondDiv">
-								<div class="filter d-flex mt-2">
+								<div class="filter d-flex mt-sm-2 ">
 									<form action="">
 										<button type="button" class="dropdown-toggle " style="  text-transform: capitalize; color:dodgerblue; border:1px solid lightgrey; padding:5px 20px; background-color:white; border-radius:5px; padding: 4px 25px" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat"><span  class="caret"></span> Filter</button>
 									</form>
@@ -187,6 +187,18 @@
 
 															</select>
 														</div>
+														<div class="mb-3 text-sm-left filterSelect  ">
+															<label for="ageFilter" class="col-form-label font-family">Age:</label>
+															<select name="ageFilter" id="" class="col-form-label form-select">
+																<option value="Select">Select</option>
+																<?php if ($all_users) {
+																	foreach ($all_users as $user) { ?>
+																		<option value="<?php echo $user["age"] ?>"><?php echo $user["age"]; ?></option>
+																<?php }
+																} ?>
+
+															</select>
+														</div>
 
 												</div>
 												<div class="modal-footer">
@@ -200,7 +212,7 @@
 
 									</div>
 									<div class=" mainButtons  d-flex ml-4">
-										<a href="#addEmployeeModal" style="padding:4px 25px" class="btn btn-outline-secondary BTN  text-capitalize  " data-toggle="modal">Add </a>
+										<a href="#addEmployeeModal" style="padding:4px 25px" class="btn btn-secondary BTN  text-capitalize  " data-toggle="modal">Add </a>
 										<a href="#deleteEmployeeModal" style="padding:4px 25px" class="delete_all_data text-capitalize btn BTN btn-danger" data-toggle="modal"> Delete</a>
 									</div>
 								</div>
@@ -215,7 +227,7 @@
 										</div>
 										<div class="downloadData">
 											<form action="/ExportData" method="get">
-												<button type="submit" style="text-transform: capitalize; color:dodgerblue; border:1px solid lightgrey" class="btn ">Export</button>
+												<button type="submit" style="text-transform: capitalize; color:dodgerblue; border:1px solid lightgrey" class="btn "><i class="fa-solid fa-download" style="color: #42a7f5;margin-right:5px"></i>Export</button>
 											</form>
 
 											<P><?php echo session()->getFlashData("message") ?></P>
@@ -245,16 +257,17 @@
 				<table class="table table1  table-hover ">
 					<thead class="thead bg-danger">
 						<tr class="mainHead bg-danger ">
-							<th class="">
+							<th class="" style="background-color:#f7f7f7">
 								<span class="custom-checkbox ">
 									<input type="checkbox" id="selectAll">
 									<label for="selectAll"></label>
 								</span>
 							</th>
-							<th class=" fs-5  border-left">ID</th>
-							<th class=" fs-5 border-left">Name</th>
-							<th class=" fs-5 border-left">Email</th>
-							<th class=" fs-5 border-left ">Actions</th>
+							<th style="background-color:#f7f7f7" class=" fs-5  border-left">ID</th>
+							<th style="background-color:#f7f7f7" class=" fs-5 border-left">Name</th>
+							<th style="background-color:#f7f7f7" class=" fs-5 border-left">Email</th>
+							<th style="background-color:#f7f7f7" class=" fs-5 border-left">Age</th>
+							<th style="background-color:#f7f7f7" class=" fs-5 border-left ">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -272,8 +285,9 @@
 									</td>
 									<td class=" border-left"><?php echo $user['id'];  ?></td>
 									<td class=" border-left"><?php echo $user['name'];  ?></td>
-									<td class=" border-left"><?php echo $user['email']; ?></td>
-									<td class=" border-left">
+									<td class=" border-left" style="width:35%; "><?php echo $user['email']; ?></td>
+									<td class=" border-left"><?php echo $user['age']; ?></td>
+									<td class=" border-left" style="width:15%; ">
 										<a href="#editEmployeeModal" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 										<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 									</td>
@@ -287,7 +301,7 @@
 						<?php } ?>
 					</tbody>
 				</table>
-				<div class="footer d-flex justify-content-center ">
+				<div class="footer d-flex justify-content-center mt-4 pb-3 ">
 					<div class=" d-inline  pagination justify-content-center align-items-center">
 						<ul class="pagination">
 							<?= $pager->links('group1', 'bs_pagination'); ?>
@@ -349,6 +363,10 @@
 							<label>Email</label>
 							<input type="email" class="form-control" name="email" required>
 						</div>
+						<div class="form-group">
+							<label>Age</label>
+							<input type="text" class="form-control" name="age" required>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" name="submit" data-dismiss="modal" value="Cancel">
@@ -376,6 +394,10 @@
 						<div class="form-group">
 							<label>Email</label>
 							<input type="text" class="form-control updateEmail" name="email" required>
+						</div>
+						<div class="form-group">
+							<label>Age</label>
+							<input type="text" class="form-control updateEmail" name="age" required>
 						</div>
 					</div>
 					<div class="modal-footer">
