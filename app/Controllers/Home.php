@@ -32,8 +32,9 @@ class Home extends BaseController
             $data["username"] = $_POST['nameFilter'];
             $data["email"] = $_POST['emailFilter'];
             $data["id"] = $_POST['idFilter'];
+            $data["age"] = $_POST['ageFilter'];
             echo view('inc/header');
-            if ($data["username"] || $data["email"] || $data["id"]) {
+            if ($data["username"] || $data["email"] || $data["id"] || $data["age"]) {
                 $filterData = $this->user;
 
 
@@ -45,6 +46,9 @@ class Home extends BaseController
                 }
                 if ($data["email"]) {
                     $filterData->orWhere("email", $data["email"]);
+                }
+                if ($data["age"]) {
+                    $filterData->orWhere("age", $data["age"]);
                 }
                 // $userData =  $filterData->findAll();
 
@@ -64,7 +68,8 @@ class Home extends BaseController
     {
         $username = $this->request->getVar('name');
         $email = $this->request->getVar('email');
-        $this->user->save(["name" => $username, "email" => $email]);
+        $age = $this->request->getVar('age');
+        $this->user->save(["name" => $username, "email" => $email, "age" => $age]);
         $mongoId = $this->user->insertID();
 
         // CURL api to create user
@@ -72,7 +77,8 @@ class Home extends BaseController
         $newdata = [
             "_id" =>   $mongoId,
             "name" => $username,
-            "email" => $email
+            "email" => $email,
+            "age" => $age
         ];
         $url = "http://localhost:5000/users/create";
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -99,8 +105,10 @@ class Home extends BaseController
         $id = $this->request->getVar('updateId');
         $username = $this->request->getVar('name');
         $email = $this->request->getVar('email');
+        $age = $this->request->getVar('age');
         $data['name'] = $username;
         $data['email'] = $email;
+        $data['age'] = $age;
         $this->user->update($id, $data);
 
         //Curl update user
@@ -154,6 +162,7 @@ class Home extends BaseController
         $data["filterData"] = $this->request->getVar("filter");
         $data["username"] = $_POST['nameFilter'];
         $data["email"] = $_POST['emailFilter'];
+        $data["age"] = $_POST['ageFilter'];
         $data["id"] = $_POST['idFilter'];
 
         echo view('inc/header');
@@ -167,6 +176,9 @@ class Home extends BaseController
             }
             if ($data["email"]) {
                 $filterData = $this->user->orWhere("email", $data["email"]);
+            }
+            if ($data["age"]) {
+                $filterData = $this->user->orWhere("age", $data["age"]);
             }
             $data['pager'] = $this->user->pager;
             print_r($data["users"] = $filterData->findAll());
@@ -188,7 +200,7 @@ class Home extends BaseController
 
         // file creation 
         $file = fopen('php://output', 'w');
-        $header = array("ID", "Name", "Email");
+        $header = array("ID", "Name", "Email","Age");
         fputcsv($file, $header);
         foreach ($usersData as $key => $line) {
             fputcsv($file, $line);
@@ -297,12 +309,14 @@ class Home extends BaseController
                     if (!empty($row[0]) && !empty($row[1])) {
                         $userData = [
                             'name' => $row[0],
-                            'email' => $row[1]
+                            'email' => $row[1],
+                            'age' => $row[2]
                         ];
                         $mongoData =[
                             '_id'=>$mongoId,
                             'name' => $row[0],
-                            'email' => $row[1]
+                            'email' => $row[1],
+                            'age' => $row[2]
                         ];
                         // Check for existing user
                         $existingUser = $db->table('users')
