@@ -45,8 +45,7 @@ class LoginController extends Controller
   }
 
   public function logout()
-  {
-    // Logout logic here    
+  {  
     return redirect()->to('login');
   }
 }

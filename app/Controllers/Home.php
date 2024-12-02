@@ -24,10 +24,10 @@ class Home extends BaseController
     {
         echo view('inc/header');
         $data["all_users"]  =  $this->user->orderby('id', "ASC")->findAll();
-        if ($this->request->getGet('search')) {
+        if ($this->request->getGet('search')) { //If search request is made
             $q = $this->request->getGet('search');
             $data['users'] = $this->user->where('Name LIKE', $q . '%')->orderby('name', "ASC")->paginate(10, 'group1');
-        } else if ($this->request->getPost()) {
+        } else if ($this->request->getPost()) {  //If filter request is made 
             $data["filterData"] = $this->request->getVar("filter");
             $data["username"] = $_POST['nameFilter'];
             $data["email"] = $_POST['emailFilter'];
@@ -56,7 +56,7 @@ class Home extends BaseController
                 $data['pager'] = $this->user->pager;
             }
         } else {
-            $data['users'] = $this->user->orderby('id', "ASC")->paginate(10, 'group1');
+            $data['users'] = $this->user->orderby('id', "ASC")->paginate(10, 'group1'); //If none of above made then load
         }
         $data['pager'] = $this->user->pager;
         echo view('home', $data);
@@ -127,22 +127,24 @@ class Home extends BaseController
 
     public function deleteUser()
     {
+
         $id = $this->request->getVar('id');
         $this->user->delete($id);
         echo 1;
+        $ch = curl_init();
+        $url = "http://localhost:5000/users/delete/" . $id;
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        $response = curl_exec($ch);
+        curl_close($ch);
         return redirect()->to(base_url("/"));
     }
 
 
     public function deleteAllUser()
     {
-        // echo "connected";    
-        //var_dump($ids);
-        //print_r($ids);
-        //$this->user->delete($ids);
-        //redirect()->to(base_url("/"));
-        // echo "deleted";
-
         $ids = $this->request->getVar('ids');
         for ($i = 0; $i < count($ids); $i++) {
             $this->user->delete($ids[$i]);
@@ -200,7 +202,7 @@ class Home extends BaseController
 
         // file creation 
         $file = fopen('php://output', 'w');
-        $header = array("ID", "Name", "Email","Age");
+        $header = array("ID", "Name", "Email", "Age");
         fputcsv($file, $header);
         foreach ($usersData as $key => $line) {
             fputcsv($file, $line);
@@ -312,8 +314,8 @@ class Home extends BaseController
                             'email' => $row[1],
                             'age' => $row[2]
                         ];
-                        $mongoData =[
-                            '_id'=>$mongoId,
+                        $mongoData = [
+                            '_id' => $mongoId,
                             'name' => $row[0],
                             'email' => $row[1],
                             'age' => $row[2]
@@ -332,21 +334,21 @@ class Home extends BaseController
                         //         ->where('id', $existingUser->id)
                         //         ->update($userData);
                         // } else {
-                            // Insert new user
-                            // var_dump("insert".$userData);
-                            ini_set('max_execution_time', 300); // 5 minutes
-                            $db->table('users')->insert($userData);
-                            $ch = curl_init();
-                            $id = $this->request->getVar('updateId');
-                            $url = "http://localhost:5000/users/create";
-                            curl_setopt($ch, CURLOPT_URL, $url);
-                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                            curl_setopt($ch, CURLOPT_POST, true);
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-                            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($mongoData));
+                        // Insert new user
+                        // var_dump("insert".$userData);
+                        ini_set('max_execution_time', 300);
+                        $db->table('users')->insert($userData);
+                        $ch = curl_init();
+                        $id = $this->request->getVar('updateId');
+                        $url = "http://localhost:5000/users/create";
+                        curl_setopt($ch, CURLOPT_URL, $url);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($ch, CURLOPT_POST, true);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($mongoData));
 
-                            $response = curl_exec($ch);
-                            curl_close($ch);
+                        $response = curl_exec($ch);
+                        curl_close($ch);
                         // }
 
                         $successCount++;
