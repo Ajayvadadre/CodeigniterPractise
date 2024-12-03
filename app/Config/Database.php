@@ -50,6 +50,13 @@ class Database extends Config
         ],
     ];
 
+    // public $redis = [
+    //     'host' => 'redis',
+    //     'port' => 6379,
+    //     'database' => '0',
+    //     'timeout' => 0,
+    // ];
+
     //    /**
     //     * Sample database connection for SQLite3.
     //     *

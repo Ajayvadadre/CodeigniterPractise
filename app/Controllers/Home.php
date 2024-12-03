@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use Config\Database;
+use Predis\Client;
+use Config\Cache;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -11,7 +13,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class Home extends BaseController
 {
     public $user;
+    protected $redis;
     public $load;
+
     public function __construct()
     {
         helper(['url']);
@@ -72,6 +76,51 @@ class Home extends BaseController
         $this->user->save(["name" => $username, "email" => $email, "age" => $age]);
         $mongoId = $this->user->insertID();
 
+
+        // Storing data in redis-------------------
+        try {
+            // Enable error reporting for debugging
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
+
+            // Create Redis client with more detailed configuration
+            $redis = new \Predis\Client([
+                'scheme' => 'tcp',
+                'host' => '127.0.0.1',
+                'port' => 6379,
+                'timeout' => 30,           // Increased timeout
+                'read_timeout' => 30,      // Read timeout
+                'retry_interval' => 100    // Retry interval in milliseconds
+            ]);
+
+            // Test connection explicitly
+            if ($redis->ping()) {
+                echo "Successfully connected to Redis!";
+
+                $redisData = [
+                    "name" => $username,
+                    "email" => $email,
+                    "age" => $age
+                ];
+
+                $redis->set('data', json_encode($redisData));
+                echo "Data successfully stored in Redis";
+            }
+        } catch (\Predis\Connection\ConnectionException $e) {
+            echo "Connection Error: " . $e->getMessage() . "\n";
+            echo "Error Code: " . $e->getCode() . "\n";
+            // Log additional details
+            error_log("Redis Connection Error Details: " . print_r([
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ], true));
+        } catch (\Exception $e) {
+            echo "General Error: " . $e->getMessage();
+        }
+
+        // Storing data in  Mongo database-------------
         // CURL api to create user
         $ch = curl_init();
         $newdata = [
@@ -91,8 +140,9 @@ class Home extends BaseController
         curl_close($ch);
 
         session()->setFlashData("sucess", "Data added Sucessfully");
-        return redirect()->to(base_url("/dashboard"));
+        // return redirect()->to(base_url("/dashboard"));
     }
+
 
     public function getSingleUser($id)
     {
@@ -340,7 +390,7 @@ class Home extends BaseController
                         $db->table('users')->insert($userData);
                         $ch = curl_init();
                         $id = $this->request->getVar('updateId');
-                        $url = "http://localhost:5000/users/create";
+                        $url = "http://localhost:5000/users/create/".$id;
                         curl_setopt($ch, CURLOPT_URL, $url);
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                         curl_setopt($ch, CURLOPT_POST, true);
