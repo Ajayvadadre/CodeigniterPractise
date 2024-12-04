@@ -19,4 +19,4 @@ $routes->post('/deleteUser', 'Home::deleteUser');
 $routes->post('/deleteAllUser', 'Home::deleteAllUser');
 $routes->post('/login', 'LoginController::authenticate');
 $routes->post('/register/saveData', 'RegistarController::saveData');
-// $routes->post('/register', 'Home::register');
+// $routes->post('/register', 'Home::register');    
